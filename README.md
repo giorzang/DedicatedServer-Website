@@ -1,13 +1,38 @@
 # giORZang's Dedicated Server
 
-### Tính năng
-- Login bằng tài khoản Steam.
-- Admin có thể tạo Match mới, đặt tên, thể loại (`BO1`, `BO3` và `BO5`), mật khẩu (tùy chọn) và mô tả trận đấu.
-  - Với mỗi `matches.id = i` ta có `teams.id = 2*i-1` và `teams.id = 2*i`.
-  - Sau khi tạo Match, database tự tạo ra 2 teams với `teams.captain = NULL`.
-- User có thể tham gia một Team nào đó trong Match nếu Match đó đang ở trạng thái `waiting` và Team đó chưa đủ 5 người.
-  - Ta thêm vào database `players(user_id, team_id) = players(users.steamid64, teams.id)` nghĩa là User đã thành công tham gia Team.
-  - Nếu User tham gia một Team nào đó trong Match có `teams.captain = NULL` thì User đó sẽ làm captain (`teams.captain = users.steamid64`)
-  - Nếu User là captain của một Team nào đó trong Match mà User đó rời Match thì `teams.captain = NULL` và xóa dữ liệu`players(users.steamid64, teams.id)`
-- Sau khi User tham gia Match sẽ có nút `Ready/Unready`.
-- Admin có nút `Start` để bắt đầu khi tất cả User trong Match `Ready`.
+## Backend
+
+**1. Auth APIs**
+| **Method** | **Endpoint** | **Mô tả** |
+|------------|--------------|-----------|
+| `GET` | `/api/steam` | Redirect sang Steam login |
+| `GET` | `/api/logout` | Đăng xuất tài khoản Steam |
+
+**2. Match APIs**
+| **Method** | **Endpoint** | **Mô tả** |
+|------------|--------------|-----------|
+| `GET` | `/api/matches` | Lấy danh sách tất cả matches (hiển thị ở trang matches) |
+| `POST` | `/api/matches` | (only Admin) Tạo match mới (match_name, bo_mode, passwd, descri, teams.teamname) |
+| `GET` | `/api/matches/:id` | Lấy chi tiết 1 match |
+| `POST` | `/api/matches/:id/edit` | Sửa thông tin match (match_name, bo_mode, passwd, descri, teams.teamname) |
+| `POST` | `/api/matches/:id/start` | (only Admin) bắt đầu match (check captain already exists per team, check all players ready, chuyển `waiting` sang `in_progress`)
+
+**3. Team/Player APIs**
+| **Method** | **Endpoint** | **Mô tả** |
+|------------|--------------|-----------|
+| `POST` | `/api/matches/:id/join` | Người chơi tham gia team1/team2 (nếu là player đầu tiên join team thì là captain |
+| `POST` | `/api/matches/:id/leave` | Người chơi rời khỏi team (nếu player là captain thì chuyển captain cho người vào team sớm nhất, sau đó xóa record trong bảng `players`) |
+| `POST` | `/api/matches/:id/ready` | Người chơi toggle ready/unready (`isready`) |
+
+**4. Ban/Pick Map APIs (sau khi start)**
+| **Method** | **Endpoint** | **Mô tả** |
+|------------|--------------|-----------|
+| `POST` | `/api/matches/:id/ban` | (only Captain) ban map |
+| `POST` | `/api/matches/:id/pick` | (only Captain) pick map |
+| `POST` | `/api/matches/:id/side` | (only Captain) chọn side (CT/T) cho map đã pick |
+| `GET` | `/api/matches/:id/maps` | Lấy thông tin ban/pick trong match |
+
+**5. Server Interaction APIs**
+| **Method** | **Endpoint** | **Mô tả** |
+|------------|--------------|-----------|
+| `POST` | `/api/rcon` | (only Admin) Gửi lệnh RCON tới CS2 server |
