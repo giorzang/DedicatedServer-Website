@@ -1,0 +1,408 @@
+/* CS2 PUG System - League of Legends Style CSS */
+
+/* CSS Variables */
+:root {
+    /* LoL Brand Colors */
+    --lol-gold: #C9AA71;
+    --lol-gold-light: #F0E6D2;
+    --lol-gold-dark: #A09B8C;
+    --lol-blue: #0F2027;
+    --lol-blue-light: #1E2328;
+    --lol-blue-dark: #010A13;
+    --lol-teal: #0596AA;
+    --lol-teal-light: #0AC8B9;
+
+    /* Team Colors */
+    --team-blue: #3B82F6;
+    --team-blue-light: #60A5FA;
+    --team-blue-dark: #1D4ED8;
+    --team-red: #EF4444;
+    --team-red-light: #F87171;
+    --team-red-dark: #DC2626;
+
+    /* UI Colors */
+    --bg-primary: #010A13;
+    --bg-secondary: #1E2328;
+    --bg-tertiary: #0F2027;
+    --text-primary: #F0E6D2;
+    --text-secondary: #C9AA71;
+    --text-muted: #A09B8C;
+    --border-color: #463714;
+    --accent-color: #C89B3C;
+
+    /* Effects */
+    --shadow-gold: 0 0 20px rgba(200, 155, 60, 0.3);
+    --shadow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+    --shadow-red: 0 0 20px rgba(239, 68, 68, 0.3);
+
+    /* Typography */
+    --font-primary: 'Cinzel', serif;
+    --font-secondary: 'Inter', sans-serif;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-secondary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    line-height: 1.6;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.hexagon-loader {
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--lol-gold);
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* View Container */
+.view-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    z-index: 100;
+}
+
+.view-container.active {
+    display: block;
+}
+
+/* Authentication View */
+#auth-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, var(--bg-primary), var(--bg-secondary));
+    overflow: hidden;
+}
+
+.hexagon-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 25% 25%, var(--lol-gold) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, var(--lol-teal) 1px, transparent 1px);
+    background-size: 100px 100px;
+    opacity: 0.1;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.auth-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(201, 170, 113, 0.1) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+}
+
+.auth-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.auth-header {
+    margin-bottom: 3rem;
+}
+
+.brand-logo {
+    font-size: 4rem;
+    color: var(--lol-gold);
+    margin-bottom: 1rem;
+    text-shadow: var(--shadow-gold);
+}
+
+.brand-title {
+    font-family: var(--font-primary);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
+}
+
+.brand-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* Steam Login Button */
+.steam-login-btn {
+    position: relative;
+    background: transparent;
+    border: 2px solid var(--lol-gold);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 350px;
+    transition: all var(--transition-smooth);
+}
+
+.steam-login-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(201, 170, 113, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.steam-login-btn:hover::before {
+    left: 100%;
+}
+
+.steam-login-btn:hover {
+    box-shadow: var(--shadow-gold);
+    transform: translateY(-2px);
+}
+
+.btn-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.btn-content i {
+    font-size: 1.5rem;
+}
+
+.auth-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+/* Features Showcase */
+.features-showcase {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    background: rgba(30, 35, 40, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all var(--transition-smooth);
+    backdrop-filter: blur(10px);
+}
+
+.feature-card:hover {
+    border-color: var(--lol-gold);
+    transform: translateY(-2px);
+}
+
+.feature-card i {
+    font-size: 2rem;
+    color: var(--lol-gold);
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.feature-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Lobby View */
+#lobby-view {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.lobby-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+    z-index: -1;
+}
+
+.hexagon-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 98px,
+            rgba(201, 170, 113, 0.03) 100px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 98px,
+            rgba(201, 170, 113, 0.03) 100px
+        );
+    background-size: 100px 100px;
+}
+
+/* Lobby Header */
+.lobby-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(30, 35, 40, 0.9);
+    border-bottom: 2px solid var(--border-color);
+    backdrop-filter: blur(10px);
+}
+
+.header-left .brand-mini {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--lol-gold);
+}
+
+.header-center {
+    flex: 1;
+    text-align: center;
+}
+
+.match-info h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.server-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.header-right .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--lol-gold);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+#user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#user-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.logout-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+    border-color: var(--lol-gold);
+    color: var(--lol-gold);
+}

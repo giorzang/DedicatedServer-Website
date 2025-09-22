@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2 PUG System - League of Legends Style</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-theme="dark">
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="hexagon-loader"></div>
+        <p>Đang tải...</p>
+    </div>
+
+    <!-- Authentication View -->
+    <div id="auth-view" class="view-container active">
+        <div class="auth-background">
+            <div class="hexagon-pattern"></div>
+            <div class="auth-glow"></div>
+        </div>
+        <div class="auth-content">
+            <div class="auth-header">
+                <div class="brand-logo">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="brand-title">CS2 PUG SYSTEM</h1>
+                <p class="brand-subtitle">League of Legends Style Interface</p>
+            </div>
+
+            <div class="steam-login-section">
+                <button id="steam-login-btn" class="steam-login-btn">
+                    <div class="btn-background"></div>
+                    <div class="btn-content">
+                        <i class="fab fa-steam-symbol"></i>
+                        <span>ĐĂNG NHẬP QUA STEAM</span>
+                    </div>
+                </button>
+                <p class="auth-description">Sử dụng tài khoản Steam để tham gia trận đấu 5v5</p>
+            </div>
+
+            <div class="features-showcase">
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>5v5 Competitive</h3>
+                    <p>Tham gia đội hình thi đấu chuyên nghiệp</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map"></i>
+                    <h3>Map Ban/Pick</h3>
+                    <p>Hệ thống veto maps như giải đấu</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-crown"></i>
+                    <h3>Team Captain</h3>
+                    <p>Đội trưởng điều hành chiến thuật</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-server"></i>
+                    <h3>Auto Connect</h3>
+                    <p>Tự động kết nối server MatchZy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Lobby View -->
+    <div id="lobby-view" class="view-container">
+        <div class="lobby-background">
+            <div class="hexagon-grid"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="lobby-header">
+            <div class="header-left">
+                <div class="brand-mini">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>CS2 PUG</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="match-info" id="match-info">
+                    <h2 id="match-title">Chọn trận đấu để bắt đầu</h2>
+                    <div class="server-info" id="server-info">
+                        <span id="server-address">Server: Chưa chọn</span>
+                        <span id="match-status">Status: Waiting</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile" id="user-profile">
+                    <img id="user-avatar" src="" alt="Avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span id="user-name">Loading...</span>
+                        <span id="user-role">Player</span>
+                    </div>
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="lobby-main">
+            <!-- Matches List Sidebar -->
+            <aside class="matches-sidebar">
+                <div class="sidebar-header">
+                    <h3>Trận đấu khả dụng</h3>
+                    <button id="create-match-btn" class="create-match-btn" style="display: none;">
+                        <i class="fas fa-plus"></i>
+                        <span>Tạo trận</span>
+                    </button>
+                </div>
+                <div class="matches-list" id="matches-list">
+                    <!-- Matches will be loaded here -->
+                </div>
+            </aside>
+
+            <!-- Team Selection Area -->
+            <section class="team-selection">
+                <div class="teams-container">
+                    <!-- Team 1 (Blue) -->
+                    <div class="team team-blue" data-team="team1">
+                        <div class="team-header">
+                            <div class="team-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="team-name" id="team1-name">Team Alpha</h3>
+                            <div class="team-side">CT</div>
+                        </div>
+                        <div class="team-players" id="team1-players">
+                            <!-- Player slots will be generated -->
+                        </div>
+                        <button class="join-team-btn" id="join-team1-btn" data-team="team1">
+                            <i class="fas fa-plus"></i>
+                            <span>Tham gia Team Alpha</span>
+                        </button>
+                    </div>
+
+                    <!-- VS Separator -->
+                    <div class="vs-separator">
+                        <div class="vs-content">
+                            <span class="vs-text">VS</span>
+                            <div class="vs-decoration"></div>
+                        </div>
+                    </div>
+
+                    <!-- Team 2 (Red) -->
+                    <div class="team team-red" data-team="team2">
+                        <div class="team-header">
+                            <div class="team-icon">
+                                <i class="fas fa-sword"></i>
+                            </div>
+                            <h3 class="team-name" id="team2-name">Team Beta</h3>
+                            <div class="team-side">T</div>
+                        </div>
+                        <div class="team-players" id="team2-players">
+                            <!-- Player slots will be generated -->
+                        </div>
+                        <button class="join-team-btn" id="join-team2-btn" data-team="team2">
+                            <i class="fas fa-plus"></i>
+                            <span>Tham gia Team Beta</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ready Status & Controls -->
+                <div class="match-controls">
+                    <div class="ready-status">
+                        <span id="ready-count">0/10</span>
+                        <span>người chơi sẵn sàng</span>
+                    </div>
+                    <div class="control-buttons">
+                        <button id="ready-btn" class="ready-btn" disabled>
+                            <i class="fas fa-check"></i>
+                            <span>Sẵn sàng</span>
+                        </button>
+                        <button id="start-match-btn" class="start-match-btn" style="display: none;">
+                            <i class="fas fa-play"></i>
+                            <span>Bắt đầu</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Panel -->
+            <aside class="chat-panel">
+                <div class="chat-header">
+                    <h4>Chat</h4>
+                    <div class="online-count" id="online-count">0 online</div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be loaded here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Nhập tin nhắn..." maxlength="500">
+                    <button id="send-message-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Map Veto View -->
+    <div id="veto-view" class="view-container">
+        <div class="veto-background">
+            <div class="veto-overlay"></div>
+        </div>
+
+        <div class="veto-content">
+            <div class="veto-header">
+                <h2>BAN/PICK MAPS</h2>
+                <div class="veto-info">
+                    <div class="current-turn" id="current-turn">
+                        Lượt của <span id="turn-team">Team Alpha</span>
+                    </div>
+                    <div class="current-action" id="current-action">
+                        <span id="action-type">BAN</span> một map
+                    </div>
+                </div>
+            </div>
+
+            <div class="maps-grid" id="maps-grid">
+                <!-- Maps will be loaded here -->
+            </div>
+
+            <div class="veto-timeline" id="veto-timeline">
+                <!-- Veto history will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Ready View -->
+    <div id="ready-view" class="view-container">
+        <div class="ready-background">
+            <div class="ready-glow"></div>
+        </div>
+
+        <div class="ready-content">
+            <div class="ready-header">
+                <i class="fas fa-check-circle"></i>
+                <h2>TRẬN ĐẤU SẴN SÀNG</h2>
+                <p>Tất cả chuẩn bị đã hoàn tất</p>
+            </div>
+
+            <div class="match-summary" id="match-summary">
+                <!-- Match details will be shown here -->
+            </div>
+
+            <div class="connect-info" id="connect-info">
+                <div class="connect-details">
+                    <h3>Thông tin kết nối</h3>
+                    <div class="server-details">
+                        <div class="server-ip" id="connect-ip">127.0.0.1:27015</div>
+                        <button class="copy-btn" id="copy-ip-btn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="connect-command">
+                        <code id="connect-command">connect 127.0.0.1:27015</code>
+                        <button class="copy-btn" id="copy-command-btn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Match Modal -->
+    <div id="create-match-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tạo trận đấu mới</h3>
+                <button class="modal-close" id="modal-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="create-match-form" class="modal-body">
+                <div class="form-group">
+                    <label for="match-title-input">Tên trận đấu</label>
+                    <input type="text" id="match-title-input" required maxlength="100" placeholder="Nhập tên trận đấu">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="team1-name-input">Tên Team 1</label>
+                        <input type="text" id="team1-name-input" value="Team Alpha" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="team2-name-input">Tên Team 2</label>
+                        <input type="text" id="team2-name-input" value="Team Beta" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="server-ip-input">Server IP</label>
+                        <input type="text" id="server-ip-input" required placeholder="192.168.1.100">
+                    </div>
+                    <div class="form-group">
+                        <label for="server-port-input">Port</label>
+                        <input type="number" id="server-port-input" value="27015" required min="1" max="65535">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rcon-password-input">RCON Password</label>
+                    <input type="password" id="rcon-password-input" required placeholder="RCON password">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancel-create-btn">Hủy</button>
+                    <button type="submit" class="btn-primary">Tạo trận đấu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
